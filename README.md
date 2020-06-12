@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-Section 2
+14 - Section 2 - Custom Types
 
 ## Query examples for reference
 
