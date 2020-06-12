@@ -1,8 +1,32 @@
-import message, { name, location, getGreeting } from './module';
-import add, { subtract } from './maths';
+import { GraphQLServer } from 'graphql-yoga';
 
-console.log(message, 'by', name, 'in', location);
-console.log(getGreeting('Jessica'));
+// Type definitions
 
-console.log(`34 + 56 = ${add(34, 56)}`);
-console.log(`97 - 28 = ${subtract(99, 28)}`);
+const typeDefs = `
+type Query {
+  hello: String!
+  name: String!
+  location: String!
+  bio: String!
+}
+`;
+
+// Resolvers
+
+const resolvers = {
+  Query: {
+    hello: () => 'Hello. This is my first query.',
+    name: () => 'Julian',
+    location: () => 'England',
+    bio: () => 'A programmer for a long while',
+  },
+};
+
+const server = new GraphQLServer({
+  typeDefs,
+  resolvers,
+});
+
+server.start(() => {
+  console.log('Listening on port 4000');
+});

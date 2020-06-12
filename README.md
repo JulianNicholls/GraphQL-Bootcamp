@@ -77,6 +77,8 @@ mutation AddSong($title: String!) {
 * I have installed ESLint in each project. My preferences are semicolons and
   single-quotes YMMV :-)
 
+* I have kept the basics files.
+
 ## Git client
 
 I have used Git at the command-line for more than 10 years. Over that time, I have tried

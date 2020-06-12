@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start-basics": "babel-node src/basics.js",
     "start": "babel-node src/index.js"
   },
   "keywords": [],
@@ -13,5 +14,8 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "eslint": "^7.2.0"
+  },
+  "dependencies": {
+    "graphql-yoga": "^1.18.3"
   }
 }
