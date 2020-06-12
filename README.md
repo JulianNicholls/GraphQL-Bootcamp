@@ -74,7 +74,8 @@ mutation AddSong($title: String!) {
 
 ## Differences from Andrew
 
-None so far!
+* I have installed ESLint in each project. My preferences are semicolons and
+  single-quotes YMMV :-)
 
 ## Git client
 
@@ -89,4 +90,3 @@ Git shell and would advise using it to everyone.
 
 If you have any questions about this repository, or any others of mine, please
 don't hesitate to contact me.
-
