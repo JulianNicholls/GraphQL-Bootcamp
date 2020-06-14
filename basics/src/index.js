@@ -1,6 +1,25 @@
 import { GraphQLServer } from 'graphql-yoga';
 
+// Dummy data to return
+const USERS = [
+  { id: '5643789', name: 'Julian', email: 'julian@example.com', age: 47 },
+  { id: '6409', name: 'Sarah', email: 'satah@example.com' },
+  { id: '56437829', name: 'Mike', email: 'mike@example.com' },
+];
+
+const POSTS = [
+  { id: '1', title: 'First post', body: 'This is a body', published: true },
+  {
+    id: '2',
+    title: 'Second post',
+    body: 'The body in the library',
+    published: false,
+  },
+  { id: '3', title: 'Third post', body: 'Ugly bodies', published: true },
+];
+
 // Type definitions
+// Builtins: String, Int Float, ID, Boolean
 const typeDefs = `
   type User {
     id: ID!
@@ -19,9 +38,8 @@ const typeDefs = `
   type Query {
     me: User!
     post: Post!
-    greeting(name: String): String!
-    add(values: [Float!]!): Float!
-    grades: [Int!]!
+    users(query: String): [User!]!
+    posts(query: String): [Post!]!
   }
 `;
 
@@ -40,14 +58,24 @@ const resolvers = {
       body: 'A delectable body',
       published: true,
     }),
+    users: (_parent, args) => {
+      if (!args.query) return USERS;
 
-    greeting: (_parent, args /*,  context, info */) => {
-      const name = args.name ? args.name : 'to you';
+      const query = args.query.toLocaleLowerCase();
 
-      return `Hello ${name}`;
+      return USERS.filter(({ name }) => name.toLocaleLowerCase().includes(query));
     },
-    add: (_parent, { values }) => values.reduce((a, i) => a + i, 0),
-    grades: () => [99, 80, 93],
+    posts: (_parent, args) => {
+      if (!args.query) return POSTS;
+
+      const query = args.query.toLocaleLowerCase();
+
+      return POSTS.filter(
+        ({ title, body }) =>
+          title.toLocaleLowerCase().includes(query) ||
+          body.toLocaleLowerCase().includes(query)
+      );
+    },
   },
 };
 
