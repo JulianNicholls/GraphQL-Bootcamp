@@ -20,7 +20,7 @@ const typeDefs = `
     me: User!
     post: Post!
     greeting(name: String): String!
-    add(a: Float!, b: Float!): Float!
+    add(values: [Float!]!): Float!
     grades: [Int!]!
   }
 `;
@@ -46,7 +46,7 @@ const resolvers = {
 
       return `Hello ${name}`;
     },
-    add: (_parent, { a, b }) => a + b,
+    add: (_parent, { values }) => values.reduce((a, i) => a + i, 0),
     grades: () => [99, 80, 93],
   },
 };
