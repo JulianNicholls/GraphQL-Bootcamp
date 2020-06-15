@@ -61,6 +61,7 @@ const typeDefs = `
     body: String!
     published: Boolean!
     author: User!
+    comments: [Comment!]!
   }
 
   type Comment {
@@ -83,6 +84,7 @@ const typeDefs = `
 const resolvers = {
   Post: {
     author: ({ author }) => USERS.find(({ id }) => author === id),
+    comments: ({ id }) => COMMENTS.filter(({ post }) => post === id),
   },
   User: {
     posts: ({ id }) => POSTS.filter(({ author }) => author === id),
@@ -90,6 +92,7 @@ const resolvers = {
   },
   Comment: {
     author: ({ author }) => USERS.find(({ id }) => author === id),
+    post: ({ post }) => POSTS.find(({ id }) => post === id),
   },
   Query: {
     me: () => ({
