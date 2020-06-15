@@ -79,6 +79,22 @@ mutation AddSong($title: String!) {
 
 * I have kept the basics files.
 
+* I destructure much more and don't declare redundant arguments, so this:
+
+```
+Post: {
+  author: (parent, args, context, info) => USERS.find((user) => parent.author === user.id),
+},
+```
+
+becomes this
+
+```
+Post: {
+  author: ({ author }) => USERS.find(({ id }) => author === id),
+},
+```
+
 ## Git client
 
 I have used Git at the command-line for more than 10 years. Over that time, I have tried
