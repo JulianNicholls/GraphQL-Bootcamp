@@ -135,54 +135,38 @@ const resolvers = {
     comments: () => COMMENTS,
   },
   Mutation: {
-    createUser: (_parent, { name, email, age }) => {
-      const dup = USERS.some((user) => user.email === email);
+    createUser: (_parent, args) => {
+      const dup = USERS.some(({ email }) => email === args.email);
 
       if (dup) throw new Error('Email address is already in use.');
 
-      const newUser = {
-        id: uuid(),
-        name,
-        email,
-        age,
-      };
+      const newUser = { id: uuid(), ...args };
 
       USERS.push(newUser);
 
       return newUser;
     },
-    createPost: (_parent, { title, body, published, author }) => {
-      const userFound = USERS.some(({ id }) => id === author);
+    createPost: (_parent, args) => {
+      const userFound = USERS.some(({ id }) => id === args.author);
 
       if (!userFound) throw new Error('Author is not recognised');
 
-      const newPost = {
-        id: uuid(),
-        title,
-        body,
-        published,
-        author,
-      };
+      const newPost = { id: uuid(), ...args };
 
       POSTS.push(newPost);
 
       return newPost;
     },
-    createComment: (_parent, { text, author, post }) => {
-      const userFound = USERS.some(({ id }) => id === author);
+    createComment: (_parent, args) => {
+      const userFound = USERS.some(({ id }) => id === args.author);
       const postFound = POSTS.some(
-        ({ id, published }) => id === post && published
+        ({ id, published }) => id === args.post && published
       );
 
       if (!userFound) throw new Error('Author is not recognised');
       if (!postFound) throw new Error('Post is not a published post');
 
-      const newComment = {
-        id: uuid(),
-        text,
-        author,
-        post,
-      };
+      const newComment = { id: uuid(), ...args };
 
       COMMENTS.push(newComment);
 
