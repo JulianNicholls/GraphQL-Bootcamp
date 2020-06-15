@@ -13,7 +13,7 @@ const USERS = [
   { id: '12', name: 'Mike', email: 'mike@example.com' },
 ];
 
-const POSTS = [
+let POSTS = [
   {
     id: '1',
     title: 'First post',
@@ -37,11 +37,12 @@ const POSTS = [
   },
 ];
 
-const COMMENTS = [
+let COMMENTS = [
   { id: '21', text: 'First comment', post: '1', author: '12' },
   { id: '22', text: 'Great post', post: '1', author: '11' },
   { id: '23', text: 'This stinks', post: '2', author: '12' },
   { id: '24', text: 'What a crock', post: '3', author: '10' },
+  { id: '25', text: 'Untouchable', post: '3', author: '12' },
 ];
 
 // Type definitions
@@ -103,6 +104,8 @@ const typeDefs = `
     createUser(data: CreateUserInput): User!
     createPost(data: CreatePostInput): Post!
     createComment(data: CreateCommentInput): Comment!
+
+    deleteUser(id: ID!): User!
   }
 `;
 
@@ -190,6 +193,25 @@ const resolvers = {
       COMMENTS.push(newComment);
 
       return newComment;
+    },
+    deleteUser: (_parent, args) => {
+      const userIndex = USERS.findIndex(({ id }) => id === args.id);
+
+      if (userIndex === -1) throw new Error('User not recognised');
+
+      const [user] = USERS.splice(userIndex, 1);
+
+      POSTS = POSTS.filter((post) => {
+        if (post.author !== user.id) return true;
+
+        COMMENTS = COMMENTS.filter((comment) => comment.post !== post.id);
+
+        return false;
+      });
+
+      COMMENTS = COMMENTS.filter(({ author }) => author !== user.id);
+
+      return user;
     },
   },
 };
