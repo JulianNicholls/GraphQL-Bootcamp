@@ -127,18 +127,6 @@ const resolvers = {
     post: ({ post }) => POSTS.find(({ id }) => post === id),
   },
   Query: {
-    me: () => ({
-      id: '5478395643789265',
-      name: 'Julian Nicholls',
-      email: 'julian@example.com',
-      age: 47,
-    }),
-    post: () => ({
-      id: '543789265',
-      title: 'First past the post',
-      body: 'A delectable body',
-      published: true,
-    }),
     users: (_parent, args) => {
       if (!args.query) return USERS;
 

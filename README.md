@@ -10,34 +10,52 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 These are query and mutation examples to remember the syntax when it's more than
 just a simple query or mutation.
 
-### Name your queries in the GraphiQL interface
+### Name your queries in the GraphQL playground
 
-If you name your queries and mutations, then you can have
-multiple ones there and pressing the go button will then show a list of queries and
+If you name your queries and mutations, then you can have multiple ones
+there and pressing the go button will then show a list of queries and
 mutations to run. e.g.
 
 ```
-mutation signup {
-  signup(email: "julian@example.com", password: "password") { email }
+query Users {
+  users {
+    id
+    name
+    email
+    age
+    posts { title }
+    comments { text }
+  }
 }
 
-mutation login {
-  login(email: "julian@example.com", password: "password") { email }
+mutation NewPost {
+  createPost(
+    data: {
+      title: "A new hope"
+      body: "Battle among the stars"
+      published: true
+      author: "10"
+    }
+  ) {
+    id
+    title
+    body
+    author { name }
+  }
 }
 
-mutation loginBad {
-  login(email: "julian@example.com", password: "notpassword") { email }
-}
-
-mutation logout {
-  logout { email }
+mutation DeleteUser {
+  deleteUser(id: "10") {
+    id
+    name
+  }
 }
 ```
 
 ### Fragments and Named Results
 ```
 {
-  first: company(id: "1") {
+  first: company(id: "1") {   /* named result */
     ...companyDetails
   }
 
