@@ -8,7 +8,7 @@ const USERS = [
     email: 'julian@example.com',
     age: 47,
   },
-  { id: '11', name: 'Sarah', email: 'satah@example.com' },
+  { id: '11', name: 'Sarah', email: 'sarah@example.com' },
   { id: '12', name: 'Mike', email: 'mike@example.com' },
 ];
 
@@ -36,6 +36,13 @@ const POSTS = [
   },
 ];
 
+const COMMENTS = [
+  { id: '21', text: 'First comment', post: '1', author: '12' },
+  { id: '22', text: 'Great post', post: '1', author: '11' },
+  { id: '23', text: 'This stinks', post: '2', author: '12' },
+  { id: '24', text: 'What a crock', post: '3', author: '10' },
+];
+
 // Type definitions
 // Builtins: String, Int Float, ID, Boolean
 const typeDefs = `
@@ -55,11 +62,19 @@ const typeDefs = `
     author: User!
   }
 
+  type Comment {
+    id: ID!
+    text: String!
+    author: User!
+    post: Post!
+  }
+
   type Query {
     me: User!
     post: Post!
     users(query: String): [User!]!
     posts(query: String): [Post!]!
+    comments(query: String): [Comment!]!
   }
 `;
 
@@ -101,6 +116,9 @@ const resolvers = {
           title.toLocaleLowerCase().includes(query) ||
           body.toLocaleLowerCase().includes(query)
       );
+    },
+    comments: (_parent, args) => {
+      return COMMENTS;
     },
   },
 };
