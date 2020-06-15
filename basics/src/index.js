@@ -2,20 +2,33 @@ import { GraphQLServer } from 'graphql-yoga';
 
 // Dummy data to return
 const USERS = [
-  { id: '5643789', name: 'Julian', email: 'julian@example.com', age: 47 },
-  { id: '6409', name: 'Sarah', email: 'satah@example.com' },
-  { id: '56437829', name: 'Mike', email: 'mike@example.com' },
+  { id: '10', name: 'Julian', email: 'julian@example.com', age: 47 },
+  { id: '11', name: 'Sarah', email: 'satah@example.com' },
+  { id: '12', name: 'Mike', email: 'mike@example.com' },
 ];
 
 const POSTS = [
-  { id: '1', title: 'First post', body: 'This is a body', published: true },
+  {
+    id: '1',
+    title: 'First post',
+    body: 'This is a body',
+    published: true,
+    author: '10',
+  },
   {
     id: '2',
     title: 'Second post',
     body: 'The body in the library',
     published: false,
+    author: '10',
   },
-  { id: '3', title: 'Third post', body: 'Ugly bodies', published: true },
+  {
+    id: '3',
+    title: 'Third post',
+    body: 'Ugly bodies',
+    published: true,
+    author: '11',
+  },
 ];
 
 // Type definitions
@@ -33,6 +46,7 @@ const typeDefs = `
     title: String!
     body: String!
     published: Boolean!
+    author: User!
   }
 
   type Query {
@@ -45,6 +59,11 @@ const typeDefs = `
 
 // Resolvers
 const resolvers = {
+  Post: {
+    author: ({ author }) => {
+      return USERS.find(({ id }) => author === id);
+    },
+  },
   Query: {
     me: () => ({
       id: '5478395643789265',
