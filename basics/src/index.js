@@ -2,7 +2,12 @@ import { GraphQLServer } from 'graphql-yoga';
 
 // Dummy data to return
 const USERS = [
-  { id: '10', name: 'Julian', email: 'julian@example.com', age: 47 },
+  {
+    id: '10',
+    name: 'Julian',
+    email: 'julian@example.com',
+    age: 47,
+  },
   { id: '11', name: 'Sarah', email: 'satah@example.com' },
   { id: '12', name: 'Mike', email: 'mike@example.com' },
 ];
@@ -39,6 +44,7 @@ const typeDefs = `
     name: String!
     email: String!
     age: Int
+    posts: [Post!]!
   }
 
   type Post {
@@ -60,9 +66,10 @@ const typeDefs = `
 // Resolvers
 const resolvers = {
   Post: {
-    author: ({ author }) => {
-      return USERS.find(({ id }) => author === id);
-    },
+    author: ({ author }) => USERS.find(({ id }) => author === id),
+  },
+  User: {
+    posts: ({ id }) => POSTS.filter(({ author }) => author === id),
   },
   Query: {
     me: () => ({
