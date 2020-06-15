@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-Completed Section 2
+27 - Section 3 - The Input type
 
 ## Query examples for reference
 

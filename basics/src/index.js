@@ -80,10 +80,29 @@ const typeDefs = `
     comments: [Comment!]!
   }
 
+  input CreateUserInput {
+    name: String!
+    email: String!
+    age: Int
+  }
+
+  input CreatePostInput {
+    title: String!
+    body: String!
+    published: Boolean!
+    author: ID!
+  }
+
+  input CreateCommentInput {
+    text: String!
+    author: ID!
+    post: ID!
+  }
+
   type Mutation {
-    createUser(name: String!, email: String!, age: Int): User!
-    createPost(title: String!, body: String!, published: Boolean!, author: ID!): Post!
-    createComment(text: String!, author: ID!, post: ID!): Comment!
+    createUser(data: CreateUserInput): User!
+    createPost(data: CreatePostInput): Post!
+    createComment(data: CreateCommentInput): Comment!
   }
 `;
 
@@ -135,38 +154,38 @@ const resolvers = {
     comments: () => COMMENTS,
   },
   Mutation: {
-    createUser: (_parent, args) => {
-      const dup = USERS.some(({ email }) => email === args.email);
+    createUser: (_parent, { data }) => {
+      const dup = USERS.some(({ email }) => email === data.email);
 
       if (dup) throw new Error('Email address is already in use.');
 
-      const newUser = { id: uuid(), ...args };
+      const newUser = { id: uuid(), ...data };
 
       USERS.push(newUser);
 
       return newUser;
     },
-    createPost: (_parent, args) => {
-      const userFound = USERS.some(({ id }) => id === args.author);
+    createPost: (_parent, { data }) => {
+      const userFound = USERS.some(({ id }) => id === data.author);
 
       if (!userFound) throw new Error('Author is not recognised');
 
-      const newPost = { id: uuid(), ...args };
+      const newPost = { id: uuid(), ...data };
 
       POSTS.push(newPost);
 
       return newPost;
     },
-    createComment: (_parent, args) => {
-      const userFound = USERS.some(({ id }) => id === args.author);
+    createComment: (_parent, { data }) => {
+      const userFound = USERS.some(({ id }) => id === data.author);
       const postFound = POSTS.some(
-        ({ id, published }) => id === args.post && published
+        ({ id, published }) => id === data.post && published
       );
 
       if (!userFound) throw new Error('Author is not recognised');
       if (!postFound) throw new Error('Post is not a published post');
 
-      const newComment = { id: uuid(), ...args };
+      const newComment = { id: uuid(), ...data };
 
       COMMENTS.push(newComment);
 
