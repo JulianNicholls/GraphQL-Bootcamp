@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-27 - Section 3 - The Input type
+279 - Section 3 - Deleting items
 
 ## Query examples for reference
 

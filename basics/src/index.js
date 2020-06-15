@@ -43,6 +43,7 @@ let COMMENTS = [
   { id: '23', text: 'This stinks', post: '2', author: '12' },
   { id: '24', text: 'What a crock', post: '3', author: '10' },
   { id: '25', text: 'Untouchable', post: '3', author: '12' },
+  { id: '26', text: 'A final one to delete', post: '3', author: '11' },
 ];
 
 // Type definitions
@@ -106,6 +107,8 @@ const typeDefs = `
     createComment(data: CreateCommentInput): Comment!
 
     deleteUser(id: ID!): User!
+    deletePost(id: ID!): Post!
+    deleteComment(id: ID!): Comment!
   }
 `;
 
@@ -197,7 +200,7 @@ const resolvers = {
     deleteUser: (_parent, args) => {
       const userIndex = USERS.findIndex(({ id }) => id === args.id);
 
-      if (userIndex === -1) throw new Error('User not recognised');
+      if (userIndex === -1) throw new Error('User is not recognised');
 
       const [user] = USERS.splice(userIndex, 1);
 
@@ -212,6 +215,26 @@ const resolvers = {
       COMMENTS = COMMENTS.filter(({ author }) => author !== user.id);
 
       return user;
+    },
+    deletePost: (_post, args) => {
+      const postIndex = POSTS.findIndex(({ id }) => id === args.id);
+
+      if (postIndex === -1) throw new Error('Post is not recognised');
+
+      const [post] = POSTS.splice(postIndex, 1);
+
+      COMMENTS = COMMENTS.filter((comment) => comment.post !== post.id);
+
+      return post;
+    },
+    deleteComment: (_parent, args) => {
+      const commentIndex = COMMENTS.findIndex(({ id }) => id === args.id);
+
+      if (commentIndex === -1) throw new Error('Comment is not recognised');
+
+      const [comment] = COMMENTS.splice(commentIndex, 1);
+
+      return comment;
     },
   },
 };
