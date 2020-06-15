@@ -1,4 +1,5 @@
 import { GraphQLServer } from 'graphql-yoga';
+import { v4 as uuid } from 'uuid';
 
 // Dummy data to return
 const USERS = [
@@ -76,7 +77,11 @@ const typeDefs = `
     post: Post!
     users(query: String): [User!]!
     posts(query: String): [Post!]!
-    comments(query: String): [Comment!]!
+    comments: [Comment!]!
+  }
+
+  type Mutation {
+    createUser(name: String!, email: String!, age: Int): User!
   }
 `;
 
@@ -125,8 +130,24 @@ const resolvers = {
           body.toLocaleLowerCase().includes(query)
       );
     },
-    comments: (_parent, args) => {
-      return COMMENTS;
+    comments: () => COMMENTS,
+  },
+  Mutation: {
+    createUser: (_parent, { name, email, age }) => {
+      const dup = USERS.some((user) => user.email === email);
+
+      if (dup) throw new Error('Email address is already in use.');
+
+      const newUser = {
+        id: uuid(),
+        name,
+        email,
+        age,
+      };
+
+      USERS.push(newUser);
+
+      return newUser;
     },
   },
 };
