@@ -82,6 +82,8 @@ const typeDefs = `
 
   type Mutation {
     createUser(name: String!, email: String!, age: Int): User!
+    createPost(title: String!, body: String!, published: Boolean!, author: ID!): Post!
+    createComment(text: String!, author: ID!, post: ID!): Comment!
   }
 `;
 
@@ -148,6 +150,43 @@ const resolvers = {
       USERS.push(newUser);
 
       return newUser;
+    },
+    createPost: (_parent, { title, body, published, author }) => {
+      const userFound = USERS.some(({ id }) => id === author);
+
+      if (!userFound) throw new Error('Author is not recognised');
+
+      const newPost = {
+        id: uuid(),
+        title,
+        body,
+        published,
+        author,
+      };
+
+      POSTS.push(newPost);
+
+      return newPost;
+    },
+    createComment: (_parent, { text, author, post }) => {
+      const userFound = USERS.some(({ id }) => id === author);
+      const postFound = POSTS.some(
+        ({ id, published }) => id === post && published
+      );
+
+      if (!userFound) throw new Error('Author is not recognised');
+      if (!postFound) throw new Error('Post is not a published post');
+
+      const newComment = {
+        id: uuid(),
+        text,
+        author,
+        post,
+      };
+
+      COMMENTS.push(newComment);
+
+      return newComment;
     },
   },
 };
