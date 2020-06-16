@@ -23,7 +23,7 @@ export default {
 
     return newPost;
   },
-  createComment: (_parent, { data }, { db }) => {
+  createComment: (_parent, { data }, { db, pubsub }) => {
     const userFound = db.users.some(({ id }) => id === data.author);
     const postFound = db.posts.some(
       ({ id, published }) => id === data.post && published
@@ -35,6 +35,8 @@ export default {
     const newComment = { id: uuid(), ...data };
 
     db.comments.push(newComment);
+
+    pubsub.publish(`comment ${data.post}`, { comment: newComment });
 
     return newComment;
   },

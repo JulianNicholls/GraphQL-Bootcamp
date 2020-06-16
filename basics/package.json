@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start-basics": "babel-node basics.js",
-    "start": "nodemon src/index.js --ext js,graphql --exec babel-node"
+    "start": "babel-node src/index.js",
+    "dev": "nodemon src/index.js --ext js,graphql --exec babel-node"
   },
   "keywords": [],
   "author": "Julian Nicholls <juliannicholls29@gmail.com> (https://reallybigshoe.co.uk/)",
