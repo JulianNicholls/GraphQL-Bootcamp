@@ -38,6 +38,25 @@ export default {
 
     return newComment;
   },
+  updateUser: (_parent, { id, data }, { db }) => {
+    const user = db.users.find((user) => user.id === id);
+
+    if (!user) throw new Error('User is not recognised');
+
+    // Check that the new email address is not in user
+    if (data.email) {
+      const dup = db.users.some(({ email }) => email === data.email);
+
+      if (dup) throw new Error('Email address is already in use.');
+
+      user.email = data.email;
+    }
+
+    if (data.name) user.name = data.name;
+    if (data.age !== undefined) user.age = data.age;
+
+    return user;
+  },
   deleteUser: (_parent, args, { db }) => {
     const userIndex = db.users.findIndex(({ id }) => id === args.id);
 
