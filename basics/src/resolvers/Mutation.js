@@ -57,6 +57,27 @@ export default {
 
     return user;
   },
+  updatePost: (_parent, { id, data }, { db }) => {
+    const post = db.posts.find((post) => post.id === id);
+
+    if (!post) throw new Error('Post is not recognised');
+
+    if (data.title) post.title = data.title;
+    if (data.body) post.body = data.body;
+    if (typeof data.published == 'boolean') post.published = data.published;
+
+    return post;
+  },
+  updateComment: (_parent, { id, data: { text } }, { db }) => {
+    const comment = db.comments.find((comment) => comment.id === id);
+
+    if (!comment) throw new Error('Comment is not recognised');
+
+    // Guaranteed to have new text, so just put it in
+    comment.text = text;
+
+    return comment;
+  },
   deleteUser: (_parent, args, { db }) => {
     const userIndex = db.users.findIndex(({ id }) => id === args.id);
 
@@ -76,7 +97,7 @@ export default {
 
     return user;
   },
-  deletePost: (_post, args, { db }) => {
+  deletePost: (_parent, args, { db }) => {
     const postIndex = db.posts.findIndex(({ id }) => id === args.id);
 
     if (postIndex === -1) throw new Error('Post is not recognised');

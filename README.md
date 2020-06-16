@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-279 - Section 3 - Deleting items
+33 - Completed Section 3
 
 ## Query examples for reference
 
@@ -48,6 +48,14 @@ mutation DeleteUser {
   deleteUser(id: "10") {
     id
     name
+  }
+}
+
+mutation updateUser {
+  deleteUser(id: "10", data: { email: 'newjulian@example.com }) {
+    id
+    name
+    email
   }
 }
 ```

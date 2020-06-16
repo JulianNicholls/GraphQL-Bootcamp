@@ -51,10 +51,21 @@ input CreatePostInput {
   author: ID!
 }
 
+input UpdatePostInput {
+  title: String
+  body: String
+  published: Boolean
+}
+
 input CreateCommentInput {
   text: String!
   author: ID!
   post: ID!
+}
+
+# It makes no sense to pass empty data to the update
+input UpdateCommentInput {
+  text: String!
 }
 
 type Mutation {
@@ -63,6 +74,8 @@ type Mutation {
   createComment(data: CreateCommentInput): Comment!
 
   updateUser(id: ID!, data: UpdateUserInput!): User!
+  updatePost(id: ID!, data: UpdatePostInput!): Post!
+  updateComment(id: ID!, data: UpdateCommentInput!): Comment!
 
   deleteUser(id: ID!): User!
   deletePost(id: ID!): Post!
