@@ -21,7 +21,14 @@ export default {
 
     db.posts.push(newPost);
 
-    if (newPost.published) pubsub.publish('post', { post: newPost });
+    if (newPost.published) {
+      pubsub.publish('post', {
+        post: {
+          mutation: 'CREATE',
+          data: newPost,
+        },
+      });
+    }
 
     return newPost;
   },
@@ -38,7 +45,12 @@ export default {
 
     db.comments.push(newComment);
 
-    pubsub.publish(`comment ${data.post}`, { comment: newComment });
+    pubsub.publish(`comment ${data.post}`, {
+      comment: {
+        mutation: 'CREATE',
+        data: newComment,
+      },
+    });
 
     return newComment;
   },
@@ -61,24 +73,65 @@ export default {
 
     return user;
   },
-  updatePost: (_parent, { id, data }, { db }) => {
+  updatePost: (_parent, { id, data }, { db, pubsub }) => {
     const post = db.posts.find((post) => post.id === id);
+    const original = { ...post };
 
     if (!post) throw new Error('Post is not recognised');
 
     if (data.title) post.title = data.title;
     if (data.body) post.body = data.body;
-    if (typeof data.published == 'boolean') post.published = data.published;
+
+    // Published status has changed, potentially
+    if (
+      typeof data.published == 'boolean' &&
+      data.published !== original.published
+    ) {
+      post.published = data.published;
+
+      if (data.published && !original.published) {
+        // Publish post, signal CREATE
+        pubsub.publish('post', {
+          post: {
+            mutation: 'CREATE',
+            data: post,
+          },
+        });
+      } else if (!data.published && original.published) {
+        // Unpublish, signal DELETE
+        pubsub.publish('post', {
+          post: {
+            mutation: 'DELETE',
+            data: { ...original, published: false }, // Hide updates
+          },
+        });
+      }
+    } else if (post.published) {
+      // Update post, signal UPDATE
+      pubsub.publish('post', {
+        post: {
+          mutation: 'UPDATE',
+          data: post,
+        },
+      });
+    }
 
     return post;
   },
-  updateComment: (_parent, { id, data: { text } }, { db }) => {
+  updateComment: (_parent, { id, data: { text } }, { db, pubsub }) => {
     const comment = db.comments.find((comment) => comment.id === id);
 
     if (!comment) throw new Error('Comment is not recognised');
 
     // Guaranteed to have new text, so just put it in
     comment.text = text;
+
+    pubsub.publish(`comment ${comment.post}`, {
+      comment: {
+        mutation: 'UPDATE',
+        data: comment,
+      },
+    });
 
     return comment;
   },
@@ -101,7 +154,7 @@ export default {
 
     return user;
   },
-  deletePost: (_parent, args, { db }) => {
+  deletePost: (_parent, args, { db, pubsub }) => {
     const postIndex = db.posts.findIndex(({ id }) => id === args.id);
 
     if (postIndex === -1) throw new Error('Post is not recognised');
@@ -110,14 +163,30 @@ export default {
 
     db.comments = db.comments.filter((comment) => comment.post !== post.id);
 
+    if (post.published) {
+      pubsub.publish('post', {
+        post: {
+          mutation: 'DELETE',
+          data: post,
+        },
+      });
+    }
+
     return post;
   },
-  deleteComment: (_parent, args, { db }) => {
+  deleteComment: (_parent, args, { db, pubsub }) => {
     const commentIndex = db.comments.findIndex(({ id }) => id === args.id);
 
     if (commentIndex === -1) throw new Error('Comment is not recognised');
 
     const [comment] = db.comments.splice(commentIndex, 1);
+
+    pubsub.publish(`comment ${comment.post}`, {
+      comment: {
+        mutation: 'DELETE',
+        data: comment,
+      },
+    });
 
     return comment;
   },
