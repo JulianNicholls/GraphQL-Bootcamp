@@ -12,7 +12,7 @@ export default {
 
     return newUser;
   },
-  createPost: (_parent, { data }, { db }) => {
+  createPost: (_parent, { data }, { db, pubsub }) => {
     const userFound = db.users.some(({ id }) => id === data.author);
 
     if (!userFound) throw new Error('Author is not recognised');
@@ -20,6 +20,8 @@ export default {
     const newPost = { id: uuid(), ...data };
 
     db.posts.push(newPost);
+
+    if (newPost.published) pubsub.publish('post', { post: newPost });
 
     return newPost;
   },
