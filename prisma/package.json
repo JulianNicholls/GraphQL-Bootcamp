@@ -1,0 +1,28 @@
+{
+  "name": "basics",
+  "version": "1.0.0",
+  "description": "First project of the GraphQL bootcamp",
+  "main": "index.js",
+  "scripts": {
+    "start-basics": "babel-node basics.js",
+    "start": "babel-node src/index.js",
+    "dev": "nodemon src/index.js --ext js,graphql --exec babel-node"
+  },
+  "keywords": [],
+  "author": "Julian Nicholls <juliannicholls29@gmail.com> (https://reallybigshoe.co.uk/)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JulianNicholls/GraphQL-Bootcamp.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "graphql-yoga": "^1.18.3",
+    "uuid": "^8.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^7.2.0"
+  }
+}
