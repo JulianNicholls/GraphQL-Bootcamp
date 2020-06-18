@@ -8,6 +8,8 @@ import User from './resolvers/User';
 import Post from './resolvers/Post';
 import Comment from './resolvers/Comment';
 
+import './prisma.js';
+
 // Resolvers
 const resolvers = {
   Query,
@@ -29,6 +31,6 @@ const server = new GraphQLServer({
   },
 });
 
-server.start(() => {
-  console.log('GraphQL server listening on port 4000');
-});
+// server.start(() => {
+//   console.log('GraphQL server listening on port 4000');
+// });
