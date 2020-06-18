@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-Lecture 40 - Completed Section 4
+Lecture 50 - Integrating prisma
 
 ## Query examples for reference
 
@@ -12,9 +12,9 @@ just a simple query or mutation.
 
 ### Name your queries in the GraphQL playground
 
-If you name your queries and mutations, then you can have multiple ones
-there and pressing the go button will then show a list of queries and
-mutations to run. e.g.
+If you name your queries, mutations and subscriptions, then you can have
+multiple ones in each tab and pressing the go button will show a list
+of actions to run. e.g.
 
 ```
 query Users {
