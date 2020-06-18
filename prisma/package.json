@@ -6,7 +6,8 @@
   "scripts": {
     "start-basics": "babel-node basics.js",
     "start": "babel-node src/index.js",
-    "dev": "nodemon src/index.js --ext js,graphql --exec babel-node"
+    "dev": "nodemon src/index.js --ext js,graphql --exec babel-node",
+    "get-schema": "graphql get-schema -p prisma"
   },
   "keywords": [],
   "author": "Julian Nicholls <juliannicholls29@gmail.com> (https://reallybigshoe.co.uk/)",
@@ -16,7 +17,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "graphql-cli": "^4.0.0",
+    "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.18.3",
     "prisma-binding": "^2.3.16",
     "uuid": "^8.1.0"
