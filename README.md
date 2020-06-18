@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-Lecture 50 - Integrating prisma
+Lecture 54 - Using prisma.exists
 
 ## Query examples for reference
 

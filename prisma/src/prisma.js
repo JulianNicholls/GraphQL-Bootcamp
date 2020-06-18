@@ -5,59 +5,87 @@ const prisma = new Prisma({
   endpoint: 'http://localhost:4466',
 });
 
-// prisma.query / mutation / subscription
-// prisma.exists
+const showUsers = async () => {
+  const users = await prisma.query.users(
+    null,
+    '{ id name email posts { id title }}'
+  );
 
-// console.log('Creating Post...');
-// prisma.mutation
-//   .createPost(
-//     {
-//       data: {
-//         title: 'This is a fourth post',
-//         body: 'Another body by Andrew goes here',
-//         published: true,
-//         author: {
-//           connect: { id: 'ckbkjb0b7005e0737mnklxlp1' },
-//         },
-//       },
-//     },
-//     '{ id title body published author { name }}'
-//   )
+  console.log('\nUSERS');
+  console.log(JSON.stringify(users, undefined, 2));
+};
 
-prisma.mutation
-  .updatePost(
+const showPosts = async () => {
+  const posts = await prisma.query.posts(
+    null,
+    '{ id title body published author { name }}'
+  );
+
+  console.log('\nPOSTS');
+  console.log(JSON.stringify(posts, undefined, 2));
+};
+
+const showComments = async () => {
+  const comments = await prisma.query.comments(
+    null,
+    '{ id text author { id name } post { id title }}'
+  );
+
+  console.log('\nCOMMENTS');
+  console.log(JSON.stringify(comments, undefined, 2));
+};
+
+const createPostForUser = async (authorId, data) => {
+  const userExists = await prisma.exists.User({ id: authorId });
+
+  if (!userExists) throw new Error('User is not recognised');
+
+  const newPost = await prisma.mutation.createPost(
     {
       data: {
-        title: "Actually, it's the fifth post",
-        body: 'A fit body for this post',
+        ...data,
+        author: { connect: { id: authorId } },
       },
-      where: { id: 'ckbkshzyn000q0737v5cq0u9l' },
     },
-    '{ id title body }'
-  )
-  .then((data) => {
-    console.log(JSON.stringify(data, undefined, 2));
+    '{ author { id name email posts { id title body published } } }'
+  );
 
-    return prisma.query.posts(null, '{ id title body published author { name }}');
-  })
-  .then((data) => {
-    console.log('\nUSERS');
-    console.log(JSON.stringify(data, undefined, 2));
-  });
+  return newPost.author;
+};
 
-// prisma.query.users(null, '{ id name email posts { title }}').then((data) => {
-//   console.log('\nUSERS');
-//   console.log(JSON.stringify(data, undefined, 2));
-// });
+const updatePostForUser = async (postId, data) => {
+  const postExists = await prisma.exists.Post({ id: postId });
 
-// prisma.query.posts(null, '{ id title author { name }}').then((data) => {
-//   console.log('\nPOSTS');
-//   console.log(JSON.stringify(data, undefined, 2));
-// });
+  if (!postExists) throw new Error('Post is not recognised');
 
-// prisma.query
-//   .comments(null, '{ id text author { name } post { title }}')
+  const updated = await prisma.mutation.updatePost(
+    {
+      where: { id: postId },
+      data,
+    },
+    '{ author { id name email posts { id title body published } } }'
+  );
+
+  return updated.author;
+};
+
+// createPostForUser('ckbjtbx47003j0737jy1ec0a2', {
+//   title: 'Two of these async posts?',
+//   body: 'Post was created by createPostForUser to see if we get two',
+//   published: true,
+// })
 //   .then((data) => {
-//     console.log('\nCOMMENTS');
 //     console.log(JSON.stringify(data, undefined, 2));
-//   });
+//   })
+//   .catch((e) => console.error(e.message));
+
+// updatePostForUser('ckbkwf35500fn0737rvzmb7wg', {
+//   title: 'Updated async post with error handling',
+//   body: 'Updated again via updatePostForUser',
+//   published: true,
+// })
+//   .then((data) => {
+//     console.log('USER');
+//     console.log(JSON.stringify(data, undefined, 2));
+//   })
+//   .catch((e) => console.error(e.message));
