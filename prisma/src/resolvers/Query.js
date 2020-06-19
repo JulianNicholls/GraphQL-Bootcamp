@@ -1,23 +1,23 @@
 // Root Query
 
 export default {
-  users: async (_parent, args, { prisma }, info) => {
+  users: async (_parent, { query }, { prisma }, info) => {
     const pArgs = {};
 
-    if (args.query) {
+    if (query) {
       pArgs.where = {
-        OR: [{ name_contains: args.query }, { email_contains: args.query }],
+        OR: [{ name_contains: query }, { email_contains: query }],
       };
     }
 
     return prisma.query.users(pArgs, info);
   },
-  posts: (_parent, args, { prisma }, info) => {
+  posts: (_parent, { query }, { prisma }, info) => {
     const pArgs = {};
 
-    if (args.query) {
+    if (query) {
       pArgs.where = {
-        OR: [{ title_contains: args.query }, { body_contains: args.query }],
+        OR: [{ title_contains: query }, { body_contains: query }],
       };
     }
 

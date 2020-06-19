@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-Lecture 57 - Completed section 5
+Lecture 61 - Refactor type resolvers
 
 ## Query examples for reference
 
