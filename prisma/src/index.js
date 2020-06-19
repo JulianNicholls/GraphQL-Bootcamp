@@ -1,14 +1,13 @@
 import { GraphQLServer, PubSub } from 'graphql-yoga';
 
 import db from './db';
+import prisma from './prisma.js';
 import Query from './resolvers/Query';
 import Mutation from './resolvers/Mutation';
 import Subscription from './resolvers/Subscription';
 import User from './resolvers/User';
 import Post from './resolvers/Post';
 import Comment from './resolvers/Comment';
-
-import './prisma.js';
 
 // Resolvers
 const resolvers = {
@@ -28,9 +27,10 @@ const server = new GraphQLServer({
   context: {
     db,
     pubsub,
+    prisma,
   },
 });
 
-// server.start(() => {
-//   console.log('GraphQL server listening on port 4000');
-// });
+server.start(() => {
+  console.log('GraphQL server listening on port 4000');
+});

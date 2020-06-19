@@ -1,23 +1,13 @@
 // Root Query
 
 export default {
-  users: (_parent, args, { db }) => {
-    if (!args.query) return db.users;
-
-    const query = args.query.toLocaleLowerCase();
-
-    return db.users.filter(({ name }) => name.toLocaleLowerCase().includes(query));
+  users: async (_parent, args, { prisma }, info) => {
+    return prisma.query.users(null, info);
   },
-  posts: (_parent, args, { db }) => {
-    if (!args.query) return db.posts;
-
-    const query = args.query.toLocaleLowerCase();
-
-    return db.posts.filter(
-      ({ title, body }) =>
-        title.toLocaleLowerCase().includes(query) ||
-        body.toLocaleLowerCase().includes(query)
-    );
+  posts: (_parent, args, { prisma }, info) => {
+    return prisma.query.posts(null, info);
   },
-  comments: (_parent, _args, { db }) => db.comments,
+  comments: (_parent, _args, { prisma }, info) => {
+    return prisma.query.comments(null, info);
+  },
 };
