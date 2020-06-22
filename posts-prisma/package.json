@@ -17,10 +17,10 @@
   },
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.18.3",
-    "prisma-binding": "^2.3.16",
-    "uuid": "^8.1.0"
+    "prisma-binding": "^2.3.16"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
