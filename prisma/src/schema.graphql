@@ -1,6 +1,31 @@
 # Type definitions
 # Builtins: String, Int, Float, Boolean, ID
 
+type Query {
+  users(query: String): [User!]!
+  posts(query: String): [Post!]!
+  comments: [Comment!]!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput): User!
+  createPost(data: CreatePostInput): Post!
+  createComment(data: CreateCommentInput): Comment!
+
+  updateUser(id: ID!, data: UpdateUserInput!): User!
+  updatePost(id: ID!, data: UpdatePostInput!): Post!
+  updateComment(id: ID!, data: UpdateCommentInput!): Comment!
+
+  deleteUser(id: ID!): User!
+  deletePost(id: ID!): Post!
+  deleteComment(id: ID!): Comment!
+}
+
+type Subscription {
+  post: PostSubscriptionPayload!
+  comment(postId: ID!): CommentSubscriptionPayload!
+}
+
 type User {
   id: ID!
   name: String!
@@ -23,12 +48,6 @@ type Comment {
   text: String!
   author: User!
   post: Post!
-}
-
-type Query {
-  users(query: String): [User!]!
-  posts(query: String): [Post!]!
-  comments: [Comment!]!
 }
 
 input CreateUserInput {
@@ -62,42 +81,23 @@ input CreateCommentInput {
   post: ID!
 }
 
-# It makes no sense to pass empty data to the update
+# It makes no sense to pass empty data to the comment update
 input UpdateCommentInput {
   text: String!
 }
 
-type Mutation {
-  createUser(data: CreateUserInput): User!
-  createPost(data: CreatePostInput): Post!
-  createComment(data: CreateCommentInput): Comment!
-
-  updateUser(id: ID!, data: UpdateUserInput!): User!
-  updatePost(id: ID!, data: UpdatePostInput!): Post!
-  updateComment(id: ID!, data: UpdateCommentInput!): Comment!
-
-  deleteUser(id: ID!): User!
-  deletePost(id: ID!): Post!
-  deleteComment(id: ID!): Comment!
-}
-
 enum MutationType {
-  CREATE
-  UPDATE
-  DELETE
+  CREATED
+  UPDATED
+  DELETED
 }
 
 type PostSubscriptionPayload {
   mutation: MutationType!
-  data: Post!
+  node: Post
 }
 
 type CommentSubscriptionPayload {
   mutation: MutationType!
-  data: Comment!
-}
-
-type Subscription {
-  post: PostSubscriptionPayload!
-  comment(postId: ID!): CommentSubscriptionPayload!
+  node: Comment
 }

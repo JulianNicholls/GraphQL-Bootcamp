@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-Lecture 64 - Refactor mutations
+Lecture 65 - Refactor subscriptions
 
 ## Query examples for reference
 
