@@ -1,32 +1,12 @@
 import { v4 as uuid } from 'uuid';
 
 export default {
-  createUser: async (_parent, { data }, { prisma }, info) => {
-    const dup = await prisma.exists.User({ email: data.email });
+  createUser: (_parent, { data }, { prisma }, info) =>
+    prisma.mutation.createUser({ data }, info),
+  createPost: (_parent, { data }, { prisma }, info) => {
+    data.author = { connect: { id: data.author } };
 
-    if (dup) throw new Error('Email address is already in use.');
-
-    return prisma.mutation.createUser({ data }, info);
-  },
-  createPost: (_parent, { data }, { db, pubsub }) => {
-    const userFound = db.users.some(({ id }) => id === data.author);
-
-    if (!userFound) throw new Error('Author is not recognised');
-
-    const newPost = { id: uuid(), ...data };
-
-    db.posts.push(newPost);
-
-    if (newPost.published) {
-      pubsub.publish('post', {
-        post: {
-          mutation: 'CREATE',
-          data: newPost,
-        },
-      });
-    }
-
-    return newPost;
+    return prisma.mutation.createPost({ data }, info);
   },
   createComment: (_parent, { data }, { db, pubsub }) => {
     const userFound = db.users.some(({ id }) => id === data.author);
@@ -50,25 +30,14 @@ export default {
 
     return newComment;
   },
-  updateUser: (_parent, { id, data }, { db }) => {
-    const user = db.users.find((user) => user.id === id);
-
-    if (!user) throw new Error('User is not recognised');
-
-    // Check that the new email address is not in user
-    if (data.email) {
-      const dup = db.users.some(({ email }) => email === data.email);
-
-      if (dup) throw new Error('Email address is already in use.');
-
-      user.email = data.email;
-    }
-
-    if (data.name) user.name = data.name;
-    if (data.age !== undefined) user.age = data.age;
-
-    return user;
-  },
+  updateUser: (_parent, { id, data }, { prisma }, info) =>
+    prisma.mutation.updateUser(
+      {
+        where: { id },
+        data,
+      },
+      info
+    ),
   updatePost: (_parent, { id, data }, { db, pubsub }) => {
     const post = db.posts.find((post) => post.id === id);
     const original = { ...post };
