@@ -1,7 +1,9 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = 'secret';
+import getUserIdFromAuthHeader from '../utils/getUserId';
+
+const JWT_SECRET = 'secret'; // for now
 
 export default {
   createUser: async (_parent, { data }, { prisma }) => {
@@ -22,7 +24,6 @@ export default {
   },
   login: async (_parent, { email, password }, { prisma }) => {
     const user = await prisma.query.user({ where: { email } });
-
     const loginOK = user && (await bcrypt.compare(password, user.password));
 
     if (!loginOK) throw new Error('Email address or password not recognised');
@@ -32,10 +33,12 @@ export default {
       token: jwt.sign({ userId: user.id }, JWT_SECRET),
     };
   },
-  createPost: (_parent, { data }, { prisma }, info) => {
+  createPost: (_parent, { data }, { prisma, req }, info) => {
+    const userId = getUserIdFromAuthHeader(req);
+
     const formattedData = {
       ...data,
-      author: { connect: { id: data.author } },
+      author: { connect: { id: userId } },
     };
 
     return prisma.mutation.createPost({ data: formattedData }, info);
