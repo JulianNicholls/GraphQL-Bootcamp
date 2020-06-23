@@ -43,10 +43,12 @@ export default {
 
     return prisma.mutation.createPost({ data: formattedData }, info);
   },
-  createComment: (_parent, { data }, { prisma }, info) => {
+  createComment: (_parent, { data }, { prisma, req }, info) => {
+    const userId = getUserIdFromAuthHeader(req);
+
     const formattedData = {
       ...data,
-      author: { connect: { id: data.author } },
+      author: { connect: { id: userId } },
       post: { connect: { id: data.post } },
     };
 
@@ -63,22 +65,40 @@ export default {
       info
     );
   },
-  updatePost: (_parent, { id, data }, { prisma }, info) =>
-    prisma.mutation.updatePost(
+  updatePost: async (_parent, { id, data }, { prisma, req }, info) => {
+    const userId = getUserIdFromAuthHeader(req);
+    const okPost = await prisma.exists.Post({
+      id,
+      author: { id: userId },
+    });
+
+    if (!okPost) throw new Error('Posts can only be updated by the author');
+
+    return prisma.mutation.updatePost(
       {
         where: { id },
         data,
       },
       info
-    ),
-  updateComment: (_parent, { id, data }, { prisma }, info) =>
-    prisma.mutation.updateComment(
+    );
+  },
+  updateComment: async (_parent, { id, data }, { prisma, req }, info) => {
+    const userId = getUserIdFromAuthHeader(req);
+    const okComment = await prisma.exists.Comment({
+      id,
+      author: { id: userId },
+    });
+
+    if (!okComment) throw new Error('Comments can only be updated by the author');
+
+    return prisma.mutation.updateComment(
       {
         where: { id },
         data,
       },
       info
-    ),
+    );
+  },
   deleteUser: async (_parent, _args, { prisma, req }, info) => {
     const userId = getUserIdFromAuthHeader(req);
 
@@ -89,8 +109,26 @@ export default {
       info
     );
   },
-  deletePost: (_parent, { id }, { prisma }, info) =>
-    prisma.mutation.deletePost({ where: { id } }, info),
-  deleteComment: (_parent, { id }, { prisma }, info) =>
-    prisma.mutation.deleteComment({ where: { id } }, info),
+  deletePost: async (_parent, { id }, { prisma, req }, info) => {
+    const userId = getUserIdFromAuthHeader(req);
+    const okPost = await prisma.exists.Post({
+      id,
+      author: { id: userId },
+    });
+
+    if (!okPost) throw new Error('Posts can only be deleted by the author');
+
+    return prisma.mutation.deletePost({ where: { id } }, info);
+  },
+  deleteComment: async (_parent, { id }, { prisma, req }, info) => {
+    const userId = getUserIdFromAuthHeader(req);
+    const okComment = await prisma.exists.Comment({
+      id,
+      author: { id: userId },
+    });
+
+    if (!okComment) throw new Error('Comments can only be deleted by the author');
+
+    return prisma.mutation.deleteComment({ where: { id } }, info);
+  },
 };

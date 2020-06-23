@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-Lecture 65 - Refactor subscriptions
+Lecture 73 - Locking down mutations
 
 ## Query examples for reference
 
