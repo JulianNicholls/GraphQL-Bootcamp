@@ -1,4 +1,25 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+///////////////////////////////////////////////////////////
+// const secret = 'ghdehreup';
+// const token = jwt.sign({ id: '46' }, secret);
+// console.log({ token });
+
+// const decoded = jwt.decode(token);
+// console.log({ decoded });
+
+// const verified = jwt.verify(token, secret);
+// console.log({ verified });
+
+// try {
+//   const unverified = jwt.verify(token, secret + 'x');
+//   console.log({ unverified });
+// } catch (err) {
+//   console.log('Verify failed');
+//   console.error({ name: err.name, message: err.message });
+// }
+///////////////////////////////////////////////////////////
 
 export default {
   createUser: async (_parent, { data }, { prisma }, info) => {
@@ -10,7 +31,12 @@ export default {
       password: await bcrypt.hash(data.password, 10),
     };
 
-    return prisma.mutation.createUser({ data: userData }, info);
+    const user = await prisma.mutation.createUser({ data: userData });
+
+    return {
+      user,
+      token: jwt.sign({ userId: user.id }, 'secret'),
+    };
   },
   createPost: (_parent, { data }, { prisma }, info) => {
     const formattedData = {
