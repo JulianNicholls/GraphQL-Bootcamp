@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start-basics": "babel-node basics.js",
-    "start": "babel-node src/index.js",
-    "dev": "nodemon src/index.js --ext js,graphql --exec babel-node",
+    "server": "babel-node src/index.js",
+    "start": "nodemon src/index.js --ext js,graphql --exec babel-node",
     "get-schema": "graphql get-schema -p prisma"
   },
   "keywords": [],
@@ -20,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.18.3",
+    "jsonwebtoken": "^8.5.1",
     "prisma-binding": "^2.3.16"
   },
   "devDependencies": {
