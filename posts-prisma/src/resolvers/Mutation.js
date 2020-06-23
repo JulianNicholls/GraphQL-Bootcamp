@@ -43,8 +43,14 @@ export default {
 
     return prisma.mutation.createPost({ data: formattedData }, info);
   },
-  createComment: (_parent, { data }, { prisma, req }, info) => {
+  createComment: async (_parent, { data }, { prisma, req }, info) => {
     const userId = getUserIdFromAuthHeader(req);
+    const okPost = await prisma.exists.Post({
+      id: data.post,
+      published: true,
+    });
+
+    if (!okPost) throw new Error('Only published posts can be commented on');
 
     const formattedData = {
       ...data,
@@ -73,6 +79,16 @@ export default {
     });
 
     if (!okPost) throw new Error('Posts can only be updated by the author');
+
+    const publishedPost = await prisma.exists.Post({
+      id,
+      published: true,
+    });
+
+    if (publishedPost && !data.published)
+      await prisma.mutation.deleteManyComments({
+        where: { post: { id } },
+      });
 
     return prisma.mutation.updatePost(
       {

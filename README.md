@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-Lecture 73 - Locking down mutations
+Lecture 78 - Cleaning up edge cases
 
 ## Query examples for reference
 
@@ -104,6 +104,8 @@ mutation AddSong($title: String!) {
   single-quotes YMMV :-)
 
 * I have kept the basics files.
+
+* I use arrow functions almost exclusively.
 
 * I destructure much more and don't declare redundant arguments, so this:
 

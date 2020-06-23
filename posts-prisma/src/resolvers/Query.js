@@ -8,7 +8,7 @@ export default {
 
     if (query) {
       pArgs.where = {
-        OR: [{ name_contains: query }, { email_contains: query }],
+        OR: [{ name_contains: query }],
       };
     }
 
