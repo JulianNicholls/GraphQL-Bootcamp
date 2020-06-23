@@ -1,5 +1,28 @@
+import getUserIdFromAuthHeader from '../utils/getUserId';
+
 export default {
-  // posts: ({ id }, _args, { prisma }) => db.posts.filter(({ author }) => author === id),
+  email: {
+    fragment: 'fragment getID on User { id }',
+    resolve: (parent, _args, { req }) => {
+      const userId = getUserIdFromAuthHeader(req, false);
+
+      if (userId && userId === parent.id) return parent.email;
+
+      return null;
+    },
+  },
+  posts: {
+    fragment: 'fragment getID on User { id }',
+    resolve: async (parent, _args, { prisma }) => {
+      return prisma.query.posts({
+        where: {
+          author: { id: parent.id },
+          published: true,
+        },
+      });
+    },
+  },
+
   // comments: ({ id }, _args, { db }) =>
   //   db.comments.filter(({ author }) => author === id),
 };
