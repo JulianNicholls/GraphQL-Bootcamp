@@ -12,7 +12,7 @@ const getUserId = (req, requireAuth = true) => {
     return decoded.userId;
   }
 
-  if (requireAuth) throw new Error('Authentication required');
+  if (requireAuth) throw new Error('Authentication is required');
 
   return null; // No auth header, but not required
 };

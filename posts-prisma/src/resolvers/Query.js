@@ -15,12 +15,14 @@ export default {
     return prisma.query.users(pArgs, info);
   },
   posts: (_parent, { query }, { prisma }, info) => {
-    const pArgs = {};
+    const pArgs = {
+      where: {
+        published: true,
+      },
+    };
 
     if (query) {
-      pArgs.where = {
-        OR: [{ title_contains: query }, { body_contains: query }],
-      };
+      pArgs.where.OR = [{ title_contains: query }, { body_contains: query }];
     }
 
     return prisma.query.posts(pArgs, info);
@@ -48,5 +50,20 @@ export default {
     const userId = getUserIdFromAuthHeader(req);
 
     return prisma.query.user({ where: { id: userId } }, info);
+  },
+  myposts: (_parent, { query }, { prisma, req }, info) => {
+    const userId = getUserIdFromAuthHeader(req);
+
+    const pArgs = {
+      where: {
+        author: { id: userId },
+      },
+    };
+
+    if (query) {
+      pArgs.where.OR = [{ title_contains: query }, { body_contains: query }];
+    }
+
+    return prisma.query.posts(pArgs, info);
   },
 };
