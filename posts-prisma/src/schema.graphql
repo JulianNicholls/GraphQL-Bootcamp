@@ -13,11 +13,11 @@ type Mutation {
   createPost(data: CreatePostInput): Post!
   createComment(data: CreateCommentInput): Comment!
 
-  updateUser(id: ID!, data: UpdateUserInput!): User!
+  updateUser(data: UpdateUserInput!): User!
   updatePost(id: ID!, data: UpdatePostInput!): Post!
   updateComment(id: ID!, data: UpdateCommentInput!): Comment!
 
-  deleteUser(id: ID!): User!
+  deleteUser: User!
   deletePost(id: ID!): Post!
   deleteComment(id: ID!): Comment!
 }

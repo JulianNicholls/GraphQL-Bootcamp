@@ -1,7 +1,7 @@
 {
-  "name": "basics",
-  "version": "1.0.0",
-  "description": "First project of the GraphQL bootcamp",
+  "name": "posts-prisma",
+  "version": "1.0.3",
+  "description": "Blog using prisma",
   "main": "index.js",
   "scripts": {
     "start-basics": "babel-node basics.js",

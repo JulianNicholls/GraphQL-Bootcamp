@@ -52,14 +52,17 @@ export default {
 
     return prisma.mutation.createComment({ data: formattedData }, info);
   },
-  updateUser: (_parent, { id, data }, { prisma }, info) =>
-    prisma.mutation.updateUser(
+  updateUser: (_parent, { data }, { prisma, req }, info) => {
+    const userId = getUserIdFromAuthHeader(req);
+
+    return prisma.mutation.updateUser(
       {
-        where: { id },
+        where: { id: userId },
         data,
       },
       info
-    ),
+    );
+  },
   updatePost: (_parent, { id, data }, { prisma }, info) =>
     prisma.mutation.updatePost(
       {
@@ -76,8 +79,16 @@ export default {
       },
       info
     ),
-  deleteUser: async (_parent, { id }, { prisma }, info) =>
-    prisma.mutation.deleteUser({ where: { id } }, info),
+  deleteUser: async (_parent, _args, { prisma, req }, info) => {
+    const userId = getUserIdFromAuthHeader(req);
+
+    return prisma.mutation.deleteUser(
+      {
+        where: { id: userId },
+      },
+      info
+    );
+  },
   deletePost: (_parent, { id }, { prisma }, info) =>
     prisma.mutation.deletePost({ where: { id } }, info),
   deleteComment: (_parent, { id }, { prisma }, info) =>
