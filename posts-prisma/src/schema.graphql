@@ -9,6 +9,7 @@ type Query {
 
 type Mutation {
   createUser(data: CreateUserInput): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
   createPost(data: CreatePostInput): Post!
   createComment(data: CreateCommentInput): Comment!
 

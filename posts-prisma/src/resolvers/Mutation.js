@@ -1,28 +1,10 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-///////////////////////////////////////////////////////////
-// const secret = 'ghdehreup';
-// const token = jwt.sign({ id: '46' }, secret);
-// console.log({ token });
-
-// const decoded = jwt.decode(token);
-// console.log({ decoded });
-
-// const verified = jwt.verify(token, secret);
-// console.log({ verified });
-
-// try {
-//   const unverified = jwt.verify(token, secret + 'x');
-//   console.log({ unverified });
-// } catch (err) {
-//   console.log('Verify failed');
-//   console.error({ name: err.name, message: err.message });
-// }
-///////////////////////////////////////////////////////////
+const JWT_SECRET = 'secret';
 
 export default {
-  createUser: async (_parent, { data }, { prisma }, info) => {
+  createUser: async (_parent, { data }, { prisma }) => {
     if (data.password.length < 8)
       throw new Error('Password must be at least 8 characters');
 
@@ -35,7 +17,19 @@ export default {
 
     return {
       user,
-      token: jwt.sign({ userId: user.id }, 'secret'),
+      token: jwt.sign({ userId: user.id }, JWT_SECRET),
+    };
+  },
+  login: async (_parent, { email, password }, { prisma }) => {
+    const user = await prisma.query.user({ where: { email } });
+
+    const loginOK = user && (await bcrypt.compare(password, user.password));
+
+    if (!loginOK) throw new Error('Email address or password not recognised');
+
+    return {
+      user,
+      token: jwt.sign({ userId: user.id }, JWT_SECRET),
     };
   },
   createPost: (_parent, { data }, { prisma }, info) => {
