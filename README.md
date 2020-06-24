@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-Lecture 78 - Cleaning up edge cases
+Lecture 81 - Completed section 6
 
 ## Query examples for reference
 
