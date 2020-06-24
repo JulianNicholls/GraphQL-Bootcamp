@@ -25,7 +25,4 @@ export default {
       );
     },
   },
-
-  // comments: ({ id }, _args, { db }) =>
-  //   db.comments.filter(({ author }) => author === id),
 };

@@ -1,9 +1,7 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 
 import getUserIdFromAuthHeader from '../utils/getUserId';
-
-const JWT_SECRET = 'secret'; // for now
+import createJWT from '../utils/createJWT';
 
 export default {
   createUser: async (_parent, { data }, { prisma }) => {
@@ -19,7 +17,7 @@ export default {
 
     return {
       user,
-      token: jwt.sign({ userId: user.id }, JWT_SECRET),
+      token: createJWT(user.id),
     };
   },
   login: async (_parent, { email, password }, { prisma }) => {
@@ -30,7 +28,7 @@ export default {
 
     return {
       user,
-      token: jwt.sign({ userId: user.id }, JWT_SECRET),
+      token: createJWT(user.id),
     };
   },
   createPost: (_parent, { data }, { prisma, req }, info) => {
