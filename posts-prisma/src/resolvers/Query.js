@@ -3,10 +3,11 @@
 import getUserIdFromAuthHeader from '../utils/getUserId';
 
 export default {
-  users: async (_parent, { query, first, skip }, { prisma }, info) => {
+  users: async (_parent, { query, first, skip, after }, { prisma }, info) => {
     const pArgs = {
       first,
       skip,
+      after,
     };
 
     if (query) {
@@ -17,10 +18,11 @@ export default {
 
     return prisma.query.users(pArgs, info);
   },
-  posts: (_parent, { query, first, skip }, { prisma }, info) => {
+  posts: (_parent, { query, first, skip, after }, { prisma }, info) => {
     const pArgs = {
       first,
       skip,
+      after,
       where: { published: true },
     };
 
@@ -30,8 +32,14 @@ export default {
 
     return prisma.query.posts(pArgs, info);
   },
-  comments: (_parent, _args, { prisma }, info) => {
-    return prisma.query.comments(null, info);
+  comments: (_parent, { first, skip, after }, { prisma }, info) => {
+    const pArgs = {
+      first,
+      skip,
+      after,
+    };
+
+    return prisma.query.comments(pArgs, info);
   },
   post: async (_parent, { id }, { prisma, req }, info) => {
     const userId = getUserIdFromAuthHeader(req, false);
@@ -54,10 +62,13 @@ export default {
 
     return prisma.query.user({ where: { id: userId } }, info);
   },
-  myposts: (_parent, { query }, { prisma, req }, info) => {
+  myposts: (_parent, { query, first, skip, after }, { prisma, req }, info) => {
     const userId = getUserIdFromAuthHeader(req);
 
     const pArgs = {
+      first,
+      skip,
+      after,
       where: {
         author: { id: userId },
       },
