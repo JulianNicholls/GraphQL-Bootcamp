@@ -14,7 +14,7 @@ const server = new GraphQLServer({
       db,
       pubsub,
       prisma,
-      req: request.request,
+      req: request,
     };
   },
   fragmentReplacements,
