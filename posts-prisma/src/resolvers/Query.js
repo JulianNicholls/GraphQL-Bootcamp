@@ -3,11 +3,17 @@
 import getUserIdFromAuthHeader from '../utils/getUserId';
 
 export default {
-  users: async (_parent, { query, first, skip, after }, { prisma }, info) => {
+  users: async (
+    _parent,
+    { query, first, skip, after, orderBy },
+    { prisma },
+    info
+  ) => {
     const pArgs = {
       first,
       skip,
       after,
+      orderBy,
     };
 
     if (query) {
@@ -18,11 +24,12 @@ export default {
 
     return prisma.query.users(pArgs, info);
   },
-  posts: (_parent, { query, first, skip, after }, { prisma }, info) => {
+  posts: (_parent, { query, first, skip, after, orderBy }, { prisma }, info) => {
     const pArgs = {
       first,
       skip,
       after,
+      orderBy,
       where: { published: true },
     };
 
@@ -32,11 +39,12 @@ export default {
 
     return prisma.query.posts(pArgs, info);
   },
-  comments: (_parent, { first, skip, after }, { prisma }, info) => {
+  comments: (_parent, { first, skip, after, orderBy }, { prisma }, info) => {
     const pArgs = {
       first,
       skip,
       after,
+      orderBy,
     };
 
     return prisma.query.comments(pArgs, info);
@@ -62,13 +70,19 @@ export default {
 
     return prisma.query.user({ where: { id: userId } }, info);
   },
-  myposts: (_parent, { query, first, skip, after }, { prisma, req }, info) => {
+  myposts: (
+    _parent,
+    { query, first, skip, after, orderBy },
+    { prisma, req },
+    info
+  ) => {
     const userId = getUserIdFromAuthHeader(req);
 
     const pArgs = {
       first,
       skip,
       after,
+      orderBy,
       where: {
         author: { id: userId },
       },

@@ -1,11 +1,15 @@
 # Type definitions
 # Builtins: String, Int, Float, Boolean, ID
 
+# import UserOrderByInput from './generated/prisma.graphql'
+# import PostOrderByInput from './generated/prisma.graphql'
+# import CommentOrderByInput from './generated/prisma.graphql'
+
 type Query {
-  users(query: String, first: Int, skip: Int, after: String): [User!]!
-  posts(query: String, first: Int, skip: Int, after: String): [Post!]!
-  myposts(query: String, first: Int, skip: Int, after: String): [Post!]!
-  comments(first: Int, skip: Int, after: String): [Comment!]!
+  users(query: String, first: Int, skip: Int, after: String, orderBy: UserOrderByInput): [User!]!
+  posts(query: String, first: Int, skip: Int, after: String, orderBy: PostOrderByInput): [Post!]!
+  myposts(query: String, first: Int, skip: Int, after: String, orderBy: PostOrderByInput): [Post!]!
+  comments(first: Int, skip: Int, after: String, orderBy: CommentOrderByInput): [Comment!]!
   post(id: ID!): Post!
   me: User!
 }
@@ -38,11 +42,8 @@ type User {
   password: String!
   posts: [Post!]!
   comments: [Comment!]!
-}
-
-type AuthPayload {
-  user: User!
-  token: String!
+  createdAt: String!
+  updatedAt: String!
 }
 
 type Post {
@@ -52,6 +53,8 @@ type Post {
   published: Boolean!
   author: User!
   comments: [Comment!]!
+  createdAt: String!
+  updatedAt: String!
 }
 
 type Comment {
@@ -59,6 +62,13 @@ type Comment {
   text: String!
   author: User!
   post: Post!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type AuthPayload {
+  user: User!
+  token: String!
 }
 
 input CreateUserInput {
