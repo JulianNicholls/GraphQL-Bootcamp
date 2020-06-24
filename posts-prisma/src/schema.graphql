@@ -2,12 +2,12 @@
 # Builtins: String, Int, Float, Boolean, ID
 
 type Query {
-  users(query: String): [User!]!
-  posts(query: String): [Post!]!
-  comments: [Comment!]!
+  users(query: String, first: Int, skip: Int): [User!]!
+  posts(query: String, first: Int, skip: Int): [Post!]!
+  myposts(query: String, first: Int, skip: Int): [Post!]!
+  comments(first: Int, skip: Int): [Comment!]!
   post(id: ID!): Post!
   me: User!
-  myposts(query: String): [Post!]!
 }
 
 type Mutation {

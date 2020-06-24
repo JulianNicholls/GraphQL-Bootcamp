@@ -3,8 +3,11 @@
 import getUserIdFromAuthHeader from '../utils/getUserId';
 
 export default {
-  users: async (_parent, { query }, { prisma }, info) => {
-    const pArgs = {};
+  users: async (_parent, { query, first, skip }, { prisma }, info) => {
+    const pArgs = {
+      first,
+      skip,
+    };
 
     if (query) {
       pArgs.where = {
@@ -14,11 +17,11 @@ export default {
 
     return prisma.query.users(pArgs, info);
   },
-  posts: (_parent, { query }, { prisma }, info) => {
+  posts: (_parent, { query, first, skip }, { prisma }, info) => {
     const pArgs = {
-      where: {
-        published: true,
-      },
+      first,
+      skip,
+      where: { published: true },
     };
 
     if (query) {
