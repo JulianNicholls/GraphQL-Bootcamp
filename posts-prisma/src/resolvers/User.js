@@ -13,13 +13,16 @@ export default {
   },
   posts: {
     fragment: 'fragment getID on User { id }',
-    resolve: async (parent, _args, { prisma }) => {
-      return prisma.query.posts({
-        where: {
-          author: { id: parent.id },
-          published: true,
+    resolve: async (parent, _args, { prisma }, info) => {
+      return prisma.query.posts(
+        {
+          where: {
+            author: { id: parent.id },
+            published: true,
+          },
         },
-      });
+        info
+      );
     },
   },
 
