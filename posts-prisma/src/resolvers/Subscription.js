@@ -1,3 +1,5 @@
+import getUserIdFromAuthHeader from '../utils/getUserId';
+
 export default {
   comment: {
     subscribe: (_parent, { postId }, { prisma }, info) =>
@@ -26,5 +28,23 @@ export default {
         },
         info
       ),
+  },
+  mypost: {
+    subscribe: async (_parent, _args, { prisma, req }, info) => {
+      const userId = getUserIdFromAuthHeader(req);
+
+      return prisma.subscription.post(
+        {
+          where: {
+            node: {
+              author: {
+                id: userId,
+              },
+            },
+          },
+        },
+        info
+      );
+    },
   },
 };
