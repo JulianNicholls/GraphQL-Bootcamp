@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-Lecture 86 - Completed section 7
+Lecture 93 - Completed section 8
 
 ## Query examples for reference
 

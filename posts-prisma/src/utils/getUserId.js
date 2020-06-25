@@ -1,7 +1,5 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = 'secret'; // for now
-
 const getUserId = (req, requireAuth = true) => {
   const header = req.request
     ? req.request.headers.authorization
@@ -9,7 +7,7 @@ const getUserId = (req, requireAuth = true) => {
 
   if (header) {
     const token = header.replace(/Bearer\s+/i, '');
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     return decoded.userId;
   }
