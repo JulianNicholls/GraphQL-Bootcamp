@@ -1,6 +1,6 @@
+import '@babel/polyfill';
 import { GraphQLServer } from 'graphql-yoga';
 
-import db from './db';
 import prisma from './prisma';
 import { resolvers, fragmentReplacements } from './resolvers';
 
@@ -11,7 +11,6 @@ const server = new GraphQLServer({
   resolvers,
   context: (request) => {
     return {
-      db,
       prisma,
       req: request,
     };
@@ -20,5 +19,5 @@ const server = new GraphQLServer({
 });
 
 server.start({ port }, () => {
-  console.log('GraphQL server listening on port 4000');
+  console.log('GraphQL server listening on port', port);
 });

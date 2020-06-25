@@ -2,12 +2,17 @@
   "name": "posts-prisma",
   "version": "1.1.0",
   "description": "Blog using prisma",
+  "engines": {
+    "node": "12.x"
+  },
   "main": "index.js",
   "scripts": {
     "start-basics": "babel-node basics.js",
-    "start": "babel-node src/index.js",
+    "start": "node dist/index.js",
+    "startdev": "env-cmd -f ./config/prod.env node dist/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
-    "get-schema": "graphql get-schema -p prisma"
+    "get-schema": "graphql get-schema -p prisma",
+    "heroku-postbuild": "babel src --out-dir dist --copy-files"
   },
   "keywords": [],
   "author": "Julian Nicholls <juliannicholls29@gmail.com> (https://reallybigshoe.co.uk/)",
@@ -17,6 +22,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.10.1",
     "bcryptjs": "^2.4.3",
     "env-cmd": "^10.1.0",
     "graphql-cli": "^3.0.14",
