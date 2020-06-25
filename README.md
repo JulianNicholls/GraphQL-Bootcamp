@@ -100,10 +100,12 @@ mutation AddSong($title: String!) {
 
 ## Differences from Andrew
 
-* I have installed ESLint in each project. My preferences are semicolons and
-  single-quotes YMMV :-)
+* Obviously, I am using git from the very beginning 😀
 
-* I have kept the basics files.
+* I have installed ESLint in each project. My preferences are semicolons and
+  single-quotes YMMV 😀
+
+* I have kept the basics files, startable with `npm run start-basics`.
 
 * I use arrow functions almost exclusively.
 

@@ -1,10 +1,10 @@
-import { GraphQLServer, PubSub } from 'graphql-yoga';
+import { GraphQLServer } from 'graphql-yoga';
 
 import db from './db';
 import prisma from './prisma';
 import { resolvers, fragmentReplacements } from './resolvers';
 
-const pubsub = new PubSub();
+const port = process.env.PORT || 4000;
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
@@ -12,7 +12,6 @@ const server = new GraphQLServer({
   context: (request) => {
     return {
       db,
-      pubsub,
       prisma,
       req: request,
     };
@@ -20,6 +19,6 @@ const server = new GraphQLServer({
   fragmentReplacements,
 });
 
-server.start(() => {
+server.start({ port }, () => {
   console.log('GraphQL server listening on port 4000');
 });

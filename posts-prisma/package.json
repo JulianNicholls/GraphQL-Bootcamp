@@ -1,12 +1,12 @@
 {
   "name": "posts-prisma",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Blog using prisma",
   "main": "index.js",
   "scripts": {
     "start-basics": "babel-node basics.js",
-    "server": "babel-node src/index.js",
-    "start": "nodemon src/index.js --ext js,graphql --exec babel-node",
+    "start": "babel-node src/index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
     "get-schema": "graphql get-schema -p prisma"
   },
   "keywords": [],
@@ -18,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "env-cmd": "^10.1.0",
     "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.18.3",
     "jsonwebtoken": "^8.5.1",
