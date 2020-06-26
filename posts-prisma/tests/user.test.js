@@ -1,6 +1,6 @@
 import { getFirstName, isValidPassword } from '../src/utils/user';
 
-describe('User', () => {
+describe('Basic Tests', () => {
   test('getFirstName should return first name', () => {
     const first = getFirstName('Julian Nicholls');
 

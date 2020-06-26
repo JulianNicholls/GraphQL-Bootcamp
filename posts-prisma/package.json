@@ -13,7 +13,11 @@
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
     "get-schema": "graphql get-schema -p prisma --dotenv config/dev.env",
     "heroku-postbuild": "babel src --out-dir dist --copy-files",
-    "test": "jest --watch"
+    "test": "env-cmd -f ./config/test.env jest --watch"
+  },
+  "jest": {
+    "globalSetup": "./tests/jest/globalSetup.js",
+    "globalTeardown": "./tests/jest/globalTeardown.js"
   },
   "keywords": [],
   "author": "Julian Nicholls <juliannicholls29@gmail.com> (https://reallybigshoe.co.uk/)",
@@ -36,7 +40,9 @@
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
     "eslint": "^7.2.0",
+    "eslint-plugin-jest": "^23.17.1",
     "jest": "^23.5.0"
   }
 }
