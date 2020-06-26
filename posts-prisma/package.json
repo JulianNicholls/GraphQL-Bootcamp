@@ -28,6 +28,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.10.1",
+    "apollo-boost": "^0.4.9",
     "bcryptjs": "^2.4.3",
     "env-cmd": "^10.1.0",
     "graphql-cli": "^3.0.14",
@@ -36,11 +37,11 @@
     "prisma-binding": "^2.3.16"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.3",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
+    "cross-fetch": "^3.0.5",
     "eslint": "^7.2.0",
     "eslint-plugin-jest": "^23.17.1",
     "jest": "^23.5.0"
