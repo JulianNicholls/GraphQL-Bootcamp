@@ -12,7 +12,8 @@
     "startdev": "env-cmd -f ./config/prod.env node dist/index.js",
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
     "get-schema": "graphql get-schema -p prisma --dotenv config/dev.env",
-    "heroku-postbuild": "babel src --out-dir dist --copy-files"
+    "heroku-postbuild": "babel src --out-dir dist --copy-files",
+    "test": "jest --watch"
   },
   "keywords": [],
   "author": "Julian Nicholls <juliannicholls29@gmail.com> (https://reallybigshoe.co.uk/)",
@@ -31,10 +32,11 @@
     "prisma-binding": "^2.3.16"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.3",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "eslint": "^7.2.0",
-    "jest": "^26.1.0"
+    "jest": "^23.5.0"
   }
 }
