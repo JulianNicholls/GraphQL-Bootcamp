@@ -1,36 +1,57 @@
 import bcrypt from 'bcryptjs';
 
 import prisma from '../../src/prisma';
+import createJWT from '../../src/utils/createJWT';
+
+const userOne = {
+  input: {
+    name: 'Jennifer',
+    email: 'jennifer@example.com',
+    password: bcrypt.hashSync('Red101%#'),
+  },
+  user: undefined,
+};
+
+const postOne = {
+  input: {
+    title: 'Draft Post',
+    body: 'A minimal body 1',
+    published: false,
+  },
+};
+
+const postTwo = {
+  input: { title: 'Published Post', body: 'A minimal body 2', published: true },
+};
 
 const seedDatabase = async () => {
+  // Delete previous data
   await prisma.mutation.deleteManyPosts();
   await prisma.mutation.deleteManyUsers();
 
-  const jennifer = await prisma.mutation.createUser({
+  // Create userOne and their token
+  userOne.user = await prisma.mutation.createUser({ data: userOne.input });
+  userOne.token = createJWT(userOne.user.id);
+
+  // Create and store postOne
+  postOne.post = await prisma.mutation.createPost({
     data: {
-      name: 'Jennifer',
-      email: 'jennifer@example.com',
-      password: bcrypt.hashSync('Red101%#'),
+      ...postOne.input,
+      author: {
+        connect: { id: userOne.user.id },
+      },
     },
   });
 
-  await prisma.mutation.createPost({
+  // Create and store postTwo
+  postTwo.post = await prisma.mutation.createPost({
     data: {
-      title: 'Draft Post',
-      body: 'A minimal body 1',
-      published: false,
-      author: { connect: { id: jennifer.id } },
-    },
-  });
-
-  await prisma.mutation.createPost({
-    data: {
-      title: 'Published Post',
-      body: 'A minimal body 2',
-      published: true,
-      author: { connect: { id: jennifer.id } },
+      ...postTwo.input,
+      author: {
+        connect: { id: userOne.user.id },
+      },
     },
   });
 };
 
-export default seedDatabase;
+export { userOne, postOne, postTwo, seedDatabase as default };
