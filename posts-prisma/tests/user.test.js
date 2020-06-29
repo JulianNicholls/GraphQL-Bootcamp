@@ -44,7 +44,7 @@ describe('User', () => {
   test('should expose only public author items', async () => {
     const response = await client.query({ query: getUsers });
 
-    expect(response.data.users).toHaveLength(2);
+    expect(response.data.users).toHaveLength(3);
     expect(response.data.users[0].email).toBeNull();
   });
 

@@ -9,29 +9,45 @@ const userOne = {
     email: 'jennifer@example.com',
     password: bcrypt.hashSync('Red101%#'),
   },
-  user: undefined,
+};
+
+const userTwo = {
+  input: {
+    name: 'Andrew',
+    email: 'andrew@example.com',
+    password: bcrypt.hashSync('Blue202#$'),
+  },
 };
 
 const postOne = {
-  input: {
-    title: 'Draft Post',
-    body: 'A minimal body 1',
-    published: false,
-  },
+  input: { title: 'Draft Post', body: 'A minimal body 1', published: false },
 };
 
 const postTwo = {
   input: { title: 'Published Post', body: 'A minimal body 2', published: true },
 };
 
+const commentOne = {
+  input: { text: 'A comment from Andrew' },
+};
+
+const commentTwo = {
+  input: { text: 'A comment from Jennifer' },
+};
+
 const seedDatabase = async () => {
   // Delete previous data
+  await prisma.mutation.deleteManyComments();
   await prisma.mutation.deleteManyPosts();
   await prisma.mutation.deleteManyUsers();
 
   // Create userOne and their token
   userOne.user = await prisma.mutation.createUser({ data: userOne.input });
   userOne.token = createJWT(userOne.user.id);
+
+  // Create userOne and their token
+  userTwo.user = await prisma.mutation.createUser({ data: userTwo.input });
+  userTwo.token = createJWT(userTwo.user.id);
 
   // Create and store postOne
   postOne.post = await prisma.mutation.createPost({
@@ -52,6 +68,40 @@ const seedDatabase = async () => {
       },
     },
   });
+
+  // Create and store commentOne
+  commentOne.comment = await prisma.mutation.createComment({
+    data: {
+      ...commentOne.input,
+      post: {
+        connect: { id: postTwo.post.id },
+      },
+      author: {
+        connect: { id: userTwo.user.id },
+      },
+    },
+  });
+
+  // Create and store commentOne
+  commentTwo.comment = await prisma.mutation.createComment({
+    data: {
+      ...commentTwo.input,
+      post: {
+        connect: { id: postTwo.post.id },
+      },
+      author: {
+        connect: { id: userOne.user.id },
+      },
+    },
+  });
 };
 
-export { userOne, postOne, postTwo, seedDatabase as default };
+export {
+  userOne,
+  userTwo,
+  postOne,
+  postTwo,
+  commentOne,
+  commentTwo,
+  seedDatabase as default,
+};

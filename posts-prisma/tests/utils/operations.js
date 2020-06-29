@@ -40,6 +40,14 @@ export const getMyPosts = gql`
   }
 `;
 
+export const getComments = gql`
+  query {
+    comments {
+      text
+    }
+  }
+`;
+
 export const createUser = gql`
   mutation($name: String!, $email: String!, $password: String!) {
     createUser(data: { name: $name, email: $email, password: $password }) {
@@ -92,6 +100,31 @@ export const updatePost = gql`
 export const deletePost = gql`
   mutation($id: ID!) {
     deletePost(id: $id) {
+      id
+    }
+  }
+`;
+
+export const createComment = gql`
+  mutation($text: String!, $post: ID!) {
+    createComment(data: { text: $text, post: $post }) {
+      id
+      text
+    }
+  }
+`;
+
+export const updateComment = gql`
+  mutation($id: ID!, $text: String!) {
+    updateComment(id: $id, data: { text: $text }) {
+      id
+    }
+  }
+`;
+
+export const deleteComment = gql`
+  mutation($id: ID!) {
+    deleteComment(id: $id) {
       id
     }
   }

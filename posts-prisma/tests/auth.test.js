@@ -1,6 +1,6 @@
 import 'cross-fetch/polyfill';
 
-import seedDatabase, { userOne, postOne, postTwo } from './utils/seedDatabase';
+import seedDatabase, { postOne, postTwo } from './utils/seedDatabase';
 import getClient from './utils/getClient';
 import {
   login,
