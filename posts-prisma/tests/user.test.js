@@ -1,43 +1,13 @@
 import 'cross-fetch/polyfill';
-import ApolloBoost, { gql } from 'apollo-boost';
-import bcrypt from 'bcryptjs';
+import { gql } from 'apollo-boost';
 
 import prisma from '../src/prisma';
+import seedDatabase from './utils/seedDatabase';
+import getClient from './utils/getClient';
 
-const client = new ApolloBoost({
-  uri: 'http://localhost:4000',
-});
+const client = getClient();
 
-beforeAll(async () => {
-  await prisma.mutation.deleteManyPosts();
-  await prisma.mutation.deleteManyUsers();
-
-  const jennifer = await prisma.mutation.createUser({
-    data: {
-      name: 'Jennifer',
-      email: 'jennifer@example.com',
-      password: bcrypt.hashSync('Red101%#'),
-    },
-  });
-
-  await prisma.mutation.createPost({
-    data: {
-      title: 'Draft Post',
-      body: 'A minimal body 1',
-      published: false,
-      author: { connect: { id: jennifer.id } },
-    },
-  });
-
-  await prisma.mutation.createPost({
-    data: {
-      title: 'Published Post',
-      body: 'A minimal body 2',
-      published: true,
-      author: { connect: { id: jennifer.id } },
-    },
-  });
-});
+beforeAll(seedDatabase);
 
 describe('User', () => {
   test('should create a new user with good credentials', async () => {
@@ -127,26 +97,5 @@ describe('User', () => {
     `;
 
     await expect(client.mutate({ mutation: loginBad })).rejects.toThrow();
-  });
-});
-
-describe('Post', () => {
-  test('should get back published posts only', async () => {
-    const getPosts = gql`
-      query {
-        posts {
-          title
-          body
-          published
-        }
-      }
-    `;
-
-    const response = await client.query({ query: getPosts });
-
-    expect(response.data.posts).toHaveLength(1);
-    expect(response.data.posts[0].title).toBe('Published Post');
-    expect(response.data.posts[0].body).toBe('A minimal body 2');
-    expect(response.data.posts[0].published).toBe(true);
   });
 });
