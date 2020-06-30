@@ -14,6 +14,7 @@ import {
   createComment,
   updateComment,
   deleteComment,
+  subscribeToComments,
 } from './utils/operations';
 
 const client = getClient();
@@ -104,5 +105,27 @@ describe('Comment', () => {
         variables: { id: commentTwo.comment.id },
       })
     ).rejects.toThrow();
+  });
+
+  test('should subscribe to comments for a post', async (done) => {
+    client
+      .subscribe({
+        query: subscribeToComments,
+        variables: { postId: postTwo.post.id },
+      })
+      .subscribe({
+        next: (response) => {
+          expect(response.data.comment.mutation).toBe('UPDATED');
+          expect(response.data.comment.node.id).toBe(commentTwo.comment.id);
+
+          done();
+        },
+      });
+
+    // Change a comment to fire the subscription
+    await prisma.mutation.updateComment({
+      where: { id: commentTwo.comment.id },
+      data: { text: 'Update for subscription' },
+    });
   });
 });

@@ -3,7 +3,7 @@ Code from the GraphQL Bootcamp by Andrew Mead on [Udemy](https://www.udemy.com/c
 
 ## Progress
 
-Lecture 110 - Section 9 - Testing Comments
+Completed Section 9 - Testing
 
 ## Query examples for reference
 
@@ -126,6 +126,10 @@ Post: {
 ```
 
 at least in the early stages.
+
+* I have implemented many of the suggested tests, and some of mine are subtly
+  different, e.g. my comment and post subscriptions do an update rather than
+  a delete, so that the ID can be checked as part of the subscription callback.
 
 ## Git client
 

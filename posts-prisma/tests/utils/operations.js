@@ -105,6 +105,19 @@ export const deletePost = gql`
   }
 `;
 
+export const subscribeToPosts = gql`
+  subscription {
+    post {
+      mutation
+      node {
+        id
+        title
+        body
+      }
+    }
+  }
+`;
+
 export const createComment = gql`
   mutation($text: String!, $post: ID!) {
     createComment(data: { text: $text, post: $post }) {
@@ -126,6 +139,18 @@ export const deleteComment = gql`
   mutation($id: ID!) {
     deleteComment(id: $id) {
       id
+    }
+  }
+`;
+
+export const subscribeToComments = gql`
+  subscription($postId: ID!) {
+    comment(postId: $postId) {
+      mutation
+      node {
+        id
+        text
+      }
     }
   }
 `;
