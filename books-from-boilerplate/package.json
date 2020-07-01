@@ -1,0 +1,58 @@
+{
+  "name": "posts-prisma",
+  "version": "1.1.0",
+  "description": "Blog using prisma",
+  "engines": {
+    "node": "12.x"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start-basics": "babel-node basics.js",
+    "start": "node dist/index.js",
+    "startdev": "env-cmd -f ./config/prod.env node dist/index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
+    "get-schema": "graphql get-schema -p prisma --dotenv config/dev.env",
+    "heroku-postbuild": "babel src --out-dir dist --copy-files",
+    "test": "env-cmd -f ./config/test.env jest --watch --runInBand"
+  },
+  "jest": {
+    "globalSetup": "./tests/jest/globalSetup.js",
+    "globalTeardown": "./tests/jest/globalTeardown.js"
+  },
+  "keywords": [],
+  "author": "Julian Nicholls <juliannicholls29@gmail.com> (https://reallybigshoe.co.uk/)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JulianNicholls/GraphQL-Bootcamp.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0",
+    "apollo-boost": "^0.4.9",
+    "apollo-cache-inmemory": "^1.2.10",
+    "apollo-client": "^2.4.2",
+    "apollo-link": "^1.2.3",
+    "apollo-link-error": "^1.1.1",
+    "apollo-link-http": "^1.5.5",
+    "apollo-link-ws": "^1.0.9",
+    "apollo-utilities": "^1.0.21",
+    "bcryptjs": "^2.4.3",
+    "env-cmd": "^10.1.0",
+    "graphql": "^0.13.2",
+    "graphql-cli": "^3.0.14",
+    "graphql-yoga": "^1.18.3",
+    "jsonwebtoken": "^8.5.1",
+    "prisma-binding": "^2.3.16",
+    "subscriptions-transport-ws": "^0.9.15"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "cross-fetch": "^3.0.5",
+    "eslint": "^7.2.0",
+    "eslint-plugin-jest": "^23.17.1",
+    "jest": "^23.5.0"
+  }
+}

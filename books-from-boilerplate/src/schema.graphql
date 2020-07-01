@@ -1,0 +1,53 @@
+# Type definitions
+
+# import UserOrderByInput from './generated/prisma.graphql'
+
+type Query {
+  users(query: String, first: Int, skip: Int, after: String, orderBy: UserOrderByInput): [User!]!
+  me: User!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+  updateUser(data: UpdateUserInput!): User!
+  deleteUser: User!
+}
+
+# type Subscription {
+# }
+
+type User {
+  id: ID!
+  name: String!
+  email: String
+  password: String!
+  posts: [Post!]!
+  comments: [Comment!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type AuthPayload {
+  user: User!
+  token: String!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+  password: String
+  age: Int
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
