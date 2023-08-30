@@ -16,7 +16,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "graphql-yoga": "^1.18.3",
+    "graphql-yoga": "^4.0.4",
     "uuid": "^8.1.0"
   },
   "devDependencies": {
