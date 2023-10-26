@@ -38,7 +38,7 @@
     "bcryptjs": "^2.4.3",
     "env-cmd": "^10.1.0",
     "graphql": "^0.13.2",
-    "graphql-cli": "^3.0.14",
+    "graphql-cli": "^4.1.0",
     "graphql-yoga": "^4.0.4",
     "jsonwebtoken": "^9.0.0",
     "prisma-binding": "^2.3.16",
